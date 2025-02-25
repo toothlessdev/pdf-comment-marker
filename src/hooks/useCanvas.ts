@@ -1,9 +1,10 @@
 import { useLayoutEffect, useRef } from "react";
+import { BaseCanvasPluginDisposeFunction } from "../plugins/BaseCanvasPlugin";
 
 export type CanvasPlugin = (
     canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D
-) => void | Promise<void>;
+) => BaseCanvasPluginDisposeFunction;
 
 export type UseCanvasOptions = {
     width: number;
@@ -33,9 +34,15 @@ export const useCanvas = ({
 
         ctx.scale(devicePixelRatio, devicePixelRatio);
 
-        plugins.forEach((plugin) => {
-            plugin(canvas, ctx);
+        const disposeFunctions = plugins.map((plugin) => {
+            return plugin(canvas, ctx);
         });
+
+        return () => {
+            disposeFunctions.forEach((dispose) => {
+                dispose();
+            });
+        };
     }, [width, height, devicePixelRatio, plugins]);
 
     return { canvasRef };

@@ -1,3 +1,5 @@
+export type BaseCanvasPluginDisposeFunction = () => void | Promise<void>;
+
 export type BaseCanvasPlugin<
     T extends Record<string, unknown> = Record<string, unknown>
 > = (
@@ -5,4 +7,4 @@ export type BaseCanvasPlugin<
 ) => (
     canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D
-) => void | Promise<void>;
+) => BaseCanvasPluginDisposeFunction;

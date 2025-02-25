@@ -27,5 +27,9 @@ export const CanvasImagePlugin: BaseCanvasPlugin<CanvasImagePluginOptions> = ({
                 image.height * baseScale
             );
         };
+
+        return () => {
+            image.onload = null;
+        };
     };
 };
